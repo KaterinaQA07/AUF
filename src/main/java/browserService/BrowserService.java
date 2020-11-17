@@ -1,59 +1,48 @@
 package browserService;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
+import io.github.bonigarcia.wdm.config.DriverManagerType;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.io.File;
 
 public class BrowserService {
     private WebDriver driver = null;
+    private DriverManagerType driverManagerType = null;
+
     public BrowserService() {
-            String browserName = new ReadProperties().getBrowserName();
+        String browserName = new ReadProperties().getBrowserName();
 
-        switch (browserName.toLowerCase()){
+        switch (browserName.toLowerCase()) {
             case "chrome":
-                ClassLoader classLoader = getClass().getClassLoader();
-                File file = new File(classLoader.getResource("drivers/chromedriver.exe").getFile());
-                String absolutePath = file.getAbsolutePath();
-                System.setProperty("webdriver.chrome.driver", absolutePath);
-
-                /*System.setProperty("webdriver.chrome.driver",
-                        "C:/Users/VVV/Desktop/Уроки/repo/Project-1/chromedriver.exe");*/
+                driverManagerType = DriverManagerType.CHROME;
+                WebDriverManager.getInstance(driverManagerType).setup();
 
                 ChromeOptions chromeOptions = new ChromeOptions();
                 chromeOptions.addArguments("--disable-gpu");
-                chromeOptions.addArguments("--start-maximizer");
-                chromeOptions.setHeadless(false);
+                chromeOptions.addArguments("--start-maximized");
+                chromeOptions.setHeadless(new ReadProperties().isHeadless());
 
                 driver = new ChromeDriver(chromeOptions);
-                driver.manage().window().maximize();
-                break;
+                //driver.manage().window().maximize();
+            break;
 
             case "firefox":
-                classLoader = getClass().getClassLoader();
-                file = new File(classLoader.getResource("drivers/geckodriver.exe").getFile());
-                absolutePath = file.getAbsolutePath();
+                driverManagerType = DriverManagerType.FIREFOX;
+                WebDriverManager.getInstance(driverManagerType).setup();
 
-                System.setProperty("webdriver.gecko.driver", absolutePath);
                 driver = new FirefoxDriver();
                 break;
 
             case "ie":
                 break;
-
             case "edge":
-                classLoader = getClass().getClassLoader();
-                file = new File(classLoader.getResource("drivers/gmsedgedriver.exe").getFile());
-                absolutePath = file.getAbsolutePath();
-
-                System.setProperty("webdriver..driver", absolutePath);
-                driver = new EdgeDriver();
                 break;
             default:
-                System.out.println("Browser is not support");
+                System.out.println("Browser is not supported.");
                 break;
         }
     }
