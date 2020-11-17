@@ -34,10 +34,12 @@ public class ReadProperties {
     public int getTimeOut() {
         return Integer.parseInt(properties.getProperty("timeout"));
     }
+
     public String getUsername() {
-        return properties.getProperty("Username");
+        return properties.getProperty("username");
     }
+
     public String getPassword() {
-        return properties.getProperty("Password");
+        return properties.getProperty("psw");
     }
 }

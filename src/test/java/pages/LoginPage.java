@@ -1,6 +1,6 @@
 package pages;
 
-import baseIntities.BasePage;
+import baseEntities.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,7 +11,7 @@ public class LoginPage extends BasePage {
     protected By emailSelector = By.id("name");
     protected By passwordSelector = By.id("password");
     protected By loginSelector = By.id("button_primary");
-    protected By ERROR_MESSADGE_Selector = By.id("error-text");
+    protected By ERROR_MESSAGE_Selector = By.className("error-text");
 
     public LoginPage(WebDriver driver, boolean openPageByUrl) {
         super(driver, openPageByUrl);
@@ -23,22 +23,29 @@ public class LoginPage extends BasePage {
     }
 
     public boolean isPageOpened() {
-        try {
+  /*      try {
             return driver.findElement(By.id("button_primary")).isDisplayed();
         } catch (Exception ex) {
             return false;
         }
+    }*/
+        return waits.isElementDisplayed(By.id("button_primary"));
     }
 
+
     public WebElement getEmailField() {
-        return driver.findElement(emailSelector);
+        return waits.getElementBy(emailSelector);
     }
 
     public WebElement getPasswordField() {
-        return driver.findElement(passwordSelector);
+        return waits.getElementBy(passwordSelector);
     }
 
     public WebElement getLoginButton() {
-        return driver.findElement(loginSelector);
+        return waits.getElementBy(loginSelector);
+    }
+
+    public String getErrorMessage() {
+        return waits.getElementBy (ERROR_MESSAGE_Selector).getText();
     }
 }

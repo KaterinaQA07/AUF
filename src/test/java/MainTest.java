@@ -1,4 +1,4 @@
-import baseIntities.BaseTest;
+import baseEntities.BaseTest;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
@@ -6,50 +6,55 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import pages.LoginPage;
 import steps.LoginSteps;
-
-import java.util.Objects;
+import utils.Retry;
 
 public class MainTest extends BaseTest {
     private LoginSteps loginSteps;
 
-
-
-    @Test(groups = )
-    public void loginPositiveTest () {
+    @Test (priority = 1)
+    public void loginPositiveTest() {
         loginSteps = new LoginSteps(driver);
-        loginSteps.login(readProperties.getUsername(),readProperties.getPassword());
+        loginSteps.login(readProperties.getUsername(),
+                readProperties.getPassword());
 
-        Assert.assertTrue(true);
-
-
-    }@Test(enabled = false)
-    public void loginNegativeTest () {
-        loginSteps = new LoginSteps(driver);
-        loginSteps.login("fail",readProperties.getPassword());
-
-        Assert.assertEquals(new LoginPage(driver, false).get.);
-    }
-    @DataProvider (name = "набор кредов")
-    public Object[][] credentialsFortest() {
-        return new Object[][]{
-                {"atrostyanko+aqa07@gmail.com", "w3n1bU7F4rxOfnfvrBJL"},
-                {"incorrectUsername", "w3n1bU7F4rxOfnfvrBJL"},
-                {"atrostyanko+aqa07@gmail.com", "incorrectPsw"},
-        };
+        Assert.assertTrue(false);
     }
 
-    @Test (dataProvider = "набор методов")
-    public void cLoginWihtMultipleCredentials(String username, String psw){
-        loginSteps= new LoginSteps(driver);
+    @Test(priority = 2)
+    public void loginNegativeTest() {
+        loginSteps = new LoginSteps(driver);
+        loginSteps.login("fail",
+                readProperties.getPassword());
+
+        Assert.assertEquals(new LoginPage(driver, false).getErrorMessage(),
+                "Email/Login or Password is incorrect. Please try again.",
+                "Incorrect error message.");
+    }
+
+    @DataProvider(name = "набора кредов")
+    public Object[][] credentialsForTest() {
+            return new Object[][] {
+                    {"atrostyanko+aqa07@gmail.com", "w3n1bU7F4rxOfnfvrBJL"},
+                    {"incorrectUsername", "w3n1bU7F4rxOfnfvrBJL"},
+                    {"atrostyanko+aqa07@gmail.com", "incorrectPsw"},
+            };
+    }
+
+    @Test(dataProvider = "набора кредов")
+    public void testLoginWithMultipleCredentials(String username, String psw) {
+        loginSteps = new LoginSteps(driver);
         loginSteps.login(username, psw);
     }
-    @Parameters ({"username", "psw"})
+
+    @Parameters({"username", "psw"})
     @Test
-    public void testLoginWithParametrs(@Optional("1") String username, @Optional("2") String psw)) {
+    public void testLoginWithParameters(@Optional("afsfsa") String username, @Optional("2") String psw) {
         loginSteps = new LoginSteps(driver);
-        loginSteps.login();
+        loginSteps.login(username, psw);
     }
 
-
+    @Test(retryAnalyzer = Retry.class)
+    public void retryTest() {
+        throw new NullPointerException();
+    }
 }
-
